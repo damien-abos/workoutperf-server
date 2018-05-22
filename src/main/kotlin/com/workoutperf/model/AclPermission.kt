@@ -1,0 +1,12 @@
+package com.workoutperf.model
+
+class AclPermission {
+    companion object {
+        val READ: Int = 0b00000000_00000000_00000000_00000001
+        val WRITE: Int = 0b00000000_00000000_00000000_00000010
+        val MODIFY: Int = 0b00000000_00000000_00000000_00000100
+        val ACL: Int = 0b00000000_00000000_00000000_00001000
+        val FULL: Int = 0b00000000_00000000_00000000_00010000
+        val DISABLED: Int = 0b01000000_00000000_00000000_00000000
+    }
+}

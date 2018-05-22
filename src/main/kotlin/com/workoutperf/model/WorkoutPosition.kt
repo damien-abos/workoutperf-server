@@ -1,0 +1,10 @@
+package com.workoutperf.model
+
+data class WorkoutPosition(
+        override val id: String?,
+        override val rank: Int,
+        override val points: Int,
+        override var leaderboard: WorkoutLeaderboard?,
+        val performance: Performance,
+        var workout: Workout?
+) : Position<WorkoutLeaderboard>

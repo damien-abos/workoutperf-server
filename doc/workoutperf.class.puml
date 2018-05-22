@@ -1,0 +1,92 @@
+@startuml
+
+class Period {
+  + begin: LocalDateTime
+  + end: LocalDateTime
+}
+
+class Location {
+  + id: String
+  + name: String
+  + address: String
+  + longitude: Double
+  + latitude: Double
+}
+
+class Contest {
+  + id: String
+  + name: String
+  + description: String,
+  + logo: URL
+}
+
+class Workout {
+  + id: String
+  + name: String
+  + description: String
+  + period: Period
+  + location: Location
+}
+
+class Performance {
+  + id: String
+  + score: Int
+  + duration: Duration
+  + date: LocalDateTime
+  + location: Location
+  + comment: String
+}
+
+abstract class Position {
+  + id: String
+  + rank: Int
+  + points: Int
+}
+
+class WorkoutPosition {
+}
+
+class ContestPosition {
+}
+
+abstract class Leaderboard {
+  + id: String
+  + period: Period
+}
+
+class Person {
+  + id: String
+  + name: String
+  + birthday: LocalDate
+  + gender: Gender
+}
+
+class Group {
+  + id: String
+  + name: String
+}
+
+enum Gender {
+  + MALE
+  + FEMALE
+}
+
+Contest *--> Workout : workouts >
+Leaderboard <|-- ContestLeaderboard
+ContestLeaderboard --> Contest : contest >
+Leaderboard <|-- WorkoutLeaderboard
+WorkoutLeaderboard --> Workout : workout >
+Leaderboard --> Group : division >
+ContestLeaderboard "1" <--o "0..n" ContestPosition
+WorkoutLeaderboard "1" <--o "0..n" WorkoutPosition
+Position <|-- ContestPosition
+Position <|-- WorkoutPosition
+WorkoutPosition "0..n" o--> "1" Performance : performance >
+ContestPosition "0..n" o--> WorkoutPosition : by workout >
+Performance --> Person : athlete >
+Performance --> Person : judge >
+Performance --> Workout : workout >
+Person o-- Group : members <
+Workout -- Group : judge >
+
+@enduml
