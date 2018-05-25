@@ -6,32 +6,54 @@ import javax.persistence.*
 data class WorkoutLeaderboard(
         @Id
         val id: String? = null,
-        @ManyToOne
-        @JoinColumn(name = "division_id")
-        val division: Group = Group(),
-        @OneToMany(mappedBy = "workout")
-        val positions: MutableSet<WorkoutPosition> = mutableSetOf(),
+
         val period: Period = Period(),
-        @ManyToOne
-        @JoinColumn(name = "workout_id")
-        val workout: Workout = Workout(),
+
         @OneToOne(cascade = [CascadeType.ALL])
         val acl: Acl = Acl()
 ) {
+    @ManyToOne
+    @JoinColumn(name = "division_id")
+    var division: Group = Group()
+
+    @OneToMany(mappedBy = "workout")
+    var positions: MutableSet<WorkoutPosition> = mutableSetOf()
+
+    @ManyToOne
+    @JoinColumn(name = "workout_id")
+    var workout: Workout = Workout()
+
+    constructor(
+            id: String? = null,
+            period: Period = Period(),
+            division: Group = Group(),
+            positions: MutableSet<WorkoutPosition> = mutableSetOf(),
+            workout: Workout = Workout(),
+            acl: Acl = Acl()
+    ) : this(
+            id = id,
+            period = period,
+            acl = acl
+    ) {
+        this.division = division
+        this.positions = positions
+        this.workout = workout
+    }
+
+
     constructor(workoutLeaderboard: com.workoutperf.model.WorkoutLeaderboard) :
             this(
                     id = workoutLeaderboard.id,
-                    division = Group(workoutLeaderboard.division),
-                    positions = workoutLeaderboard.positions
-                            .map { position ->
-                                WorkoutPosition(position)
-                            }
-                            .toCollection(LinkedHashSet(workoutLeaderboard.positions.size)),
                     period = Period(workoutLeaderboard.period),
-                    workout = Workout(workoutLeaderboard.workout),
                     acl = Acl(workoutLeaderboard.acl)
             ) {
-        this.positions.map { position -> position.leaderboard = this }
+        this.division = Group(workoutLeaderboard.division)
+        this.positions = workoutLeaderboard.positions
+                .map { position ->
+                    WorkoutPosition(position, this)
+                }
+                .toCollection(LinkedHashSet(workoutLeaderboard.positions.size))
+        this.workout = Workout(workoutLeaderboard.workout)
     }
 
     fun toModel() =

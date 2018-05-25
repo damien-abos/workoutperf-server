@@ -13,7 +13,7 @@ data class ContestPosition(
         val athlete: Person? = null,
         @ManyToOne
         @JoinColumn(name = "leaderboard_id")
-        val leaderboard: ContestLeaderboard? = null,
+        var leaderboard: ContestLeaderboard? = null,
         @ManyToMany
         @JoinTable(name = "contestposition_workoutposition",
                 joinColumns = [JoinColumn(name = "workoutposition_id", referencedColumnName = "id")],
@@ -45,6 +45,7 @@ data class ContestPosition(
                             .associateByTo(mutableMapOf(),
                                     { workoutPosition: com.workoutperf.model.WorkoutPosition -> workoutPosition.workout!! }),
                     contest = null,
+                    athlete = this.athlete?.toModel(),
                     acl = this.acl.toModel()
             )
 }

@@ -121,17 +121,17 @@ class LeaderboardService(
             }
             contest.get().divisions.map { division ->
                 val leaderboard = ContestLeaderboard(
-                       id = "${contestId}_${division.id!!}",
+                        id = "${contestId}_${division.id!!}",
                         division = division,
                         contest = contest.get()
                 )
                 val leaderboardEntity = contestLeaderboardRepository.save(leaderboard)
                 // prepare position per member
-                val positionsByMember = positionsByDivivion[division.id]!!.groupBy { workoutPosition ->
+                val positionsByMember = if (positionsByDivivion.containsKey(division.id)) positionsByDivivion[division.id]!!.groupBy { workoutPosition ->
                     workoutPosition.athlete!!.id!!
-                }
-                // create leaderboard positions
-                val contestPositions =division.members.map {athlete ->
+                } else mapOf()
+                // create leaderboard positions sorted by score
+                val contestPositions = division.members.map { athlete ->
                     val athletePositions = positionsByMember[athlete.id]!!
                     val points = athletePositions.sumBy { position -> position.points }
                     ContestPosition(
@@ -139,11 +139,22 @@ class LeaderboardService(
                             points = points,
                             athlete = athlete,
                             workoutPositions = athletePositions.toCollection(LinkedHashSet(athletePositions.size)),
-                            leaderboard  = leaderboardEntity
+                            leaderboard = leaderboardEntity
                     )
                 }.sortedBy { position -> position.points }
-                
-
+                // then update rank and save
+                var index = 1
+                var rank = 1
+                var lastPosition: ContestPosition? = null
+                contestPositions.map { position ->
+                    if (lastPosition?.points != position.points) {
+                        rank = index
+                    }
+                    lastPosition = position
+                    index++
+                    position.rank = rank
+                    contestPositionRepository.save(position)
+                }
             }
         }
     }

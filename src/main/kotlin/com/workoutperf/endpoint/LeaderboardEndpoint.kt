@@ -33,8 +33,7 @@ class LeaderboardEndpoint(
 
     @RequestMapping(method = [RequestMethod.GET])
     fun getAllWorkoutLeaderboards(
-            @PathVariable("contestId") contestId: String,
-            @PathVariable("workoutId") workoutId: String
+            @PathVariable("contestId") contestId: String
     ): ResponseEntity<Any> {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
     }
@@ -42,12 +41,11 @@ class LeaderboardEndpoint(
 
     //
     //
-    // GET /contest/{contestId}/workouts/{workoutId}/leaderboard/{leaderboardId}
+    // GET /contest/{contestId}/leaderboard/{leaderboardId}
 
     @RequestMapping(path = ["/{leaderboardId}"], method = [RequestMethod.GET])
     fun getWorkoutLeaderboard(
             @PathVariable("contestId") contestId: String,
-            @PathVariable("workoutId") workoutId: String,
             @PathVariable("leaderboardId") leaderboardId: String
     ): ResponseEntity<Any> {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
