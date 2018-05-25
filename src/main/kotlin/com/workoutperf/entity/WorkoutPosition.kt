@@ -1,8 +1,6 @@
 package com.workoutperf.entity
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.OneToOne
+import javax.persistence.*
 
 @Entity
 data class WorkoutPosition(
@@ -12,9 +10,14 @@ data class WorkoutPosition(
         val points: Int = 0,
         @OneToOne
         var leaderboard: WorkoutLeaderboard? = null,
-        @OneToOne
-        val performance: Performance = Performance(),
-        @OneToOne
+        @ManyToOne
+        @JoinColumn(name = "performance_id")
+        val performance: Performance? = null,
+        @ManyToOne
+        @JoinColumn(name = "athlete_id")
+        val athlete: Person? = null,
+        @ManyToOne
+        @JoinColumn(name = "workout_id")
         var workout: Workout? = null
 ) {
     constructor(workoutPosition: com.workoutperf.model.WorkoutPosition, workoutLeaderboard: WorkoutLeaderboard? = null) :
@@ -23,7 +26,8 @@ data class WorkoutPosition(
                     rank = workoutPosition.rank,
                     points = workoutPosition.points,
                     leaderboard = workoutLeaderboard,
-                    performance = Performance(workoutPosition.performance),
+                    performance =  if (workoutPosition.performance != null) Performance(workoutPosition.performance) else null,
+                    athlete = if (workoutPosition.athlete != null) Person(workoutPosition.athlete) else null,
                     workout = if (workoutPosition.workout != null) Workout(workoutPosition.workout!!) else null
             )
 
@@ -33,7 +37,8 @@ data class WorkoutPosition(
                     rank = this.rank,
                     points = this.points,
                     leaderboard = workoutLeaderboard,
-                    performance = this.performance.toModel(),
+                    performance = this.performance?.toModel(),
+                    athlete = this.athlete?.toModel(),
                     workout = this.workout?.toModel()
             )
 }

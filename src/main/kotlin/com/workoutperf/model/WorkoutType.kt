@@ -1,0 +1,12 @@
+package com.workoutperf.model
+
+enum class WorkoutType {
+    TIME_ASC_SCORE_ASC,
+    TIME_ASC_SCORE_DESC,
+    TIME_DESC_SCORE_ASC,
+    TIME_DESC_SCORE_DESC,
+    SCORE_ASC_TIME_ASC,
+    SCORE_ASC_TIME_DESC,
+    SCORE_DESC_TIME_ASC,
+    SCORE_DESC_TIME_DESC
+}

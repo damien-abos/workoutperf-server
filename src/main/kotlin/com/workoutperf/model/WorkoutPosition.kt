@@ -5,6 +5,7 @@ data class WorkoutPosition(
         override val rank: Int,
         override val points: Int,
         override var leaderboard: WorkoutLeaderboard?,
-        val performance: Performance,
+        val performance: Performance?,
+        val athlete: Person?,
         var workout: Workout?
 ) : Position<WorkoutLeaderboard>

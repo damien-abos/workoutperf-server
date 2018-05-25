@@ -7,5 +7,6 @@ data class ContestPosition(
         override var leaderboard: ContestLeaderboard?,
         val workoutPositions: MutableMap<Workout, WorkoutPosition>,
         var contest: Contest?,
+        val athlete: Person?,
         override val acl: Acl
 ) : AclObject, Position<ContestLeaderboard>

@@ -5,17 +5,18 @@ import javax.persistence.*
 @Entity
 data class ContestLeaderboard(
         @Id
-        val id: String?,
-        @OneToOne
-        val division: Group,
+        val id: String? = null,
+        @ManyToOne
+        @JoinColumn(name = "division_id")
+        var division: Group? = null,
         @OneToMany(mappedBy = "leaderboard")
-        val positions: MutableSet<ContestPosition>,
-        val period: Period,
+        val positions: MutableSet<ContestPosition> = mutableSetOf(),
+        val period: Period = Period(),
         @ManyToOne
         @JoinColumn(name = "contest_id")
-        val contest: Contest,
+        var contest: Contest? = null,
         @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl
+        val acl: Acl = Acl()
 ) {
     constructor(contestLeaderboard: com.workoutperf.model.ContestLeaderboard) :
             this(
@@ -34,12 +35,12 @@ data class ContestLeaderboard(
     fun toModel() =
             com.workoutperf.model.ContestLeaderboard(
                     id = this.id,
-                    division = this.division.toModel(),
+                    division = this.division!!.toModel(),
                     positions = this.positions
                             .map { contestPosition -> contestPosition.toModel() }
                             .toCollection(LinkedHashSet(this.positions.size)),
                     period = this.period.toModel(),
-                    contest = this.contest.toModel(),
+                    contest = this.contest!!.toModel(),
                     acl = this.acl.toModel()
             )
 }

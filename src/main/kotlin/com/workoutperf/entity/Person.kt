@@ -34,4 +34,16 @@ data class Person(
                     gender = com.workoutperf.model.Gender.valueOf(this.gender),
                     acl = this.acl.toModel()
             )
+
+    override fun hashCode(): Int {
+        return if (this.id != null) this.id.hashCode() else 0
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val that = other as Person?
+        return id == that!!.id
+    }
+
 }

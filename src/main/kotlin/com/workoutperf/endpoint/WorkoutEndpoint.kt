@@ -3,6 +3,7 @@ package com.workoutperf.endpoint
 import com.workoutperf.model.Acl
 import com.workoutperf.model.Period
 import com.workoutperf.model.Workout
+import com.workoutperf.model.WorkoutType
 import com.workoutperf.service.WorkoutService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -24,13 +25,15 @@ class WorkoutEndpoint(
             val id: String,
             val name: String,
             val description: String = "",
-            val period: Period = Period()
+            val period: Period = Period(),
+            val type: WorkoutType = WorkoutType.SCORE_ASC_TIME_ASC
     ) {
         fun toModel() = Workout(
                 id = this.id,
                 name = this.name,
                 description = this.description,
                 period = this.period,
+                type = this.type,
                 acl = Acl()
         )
     }

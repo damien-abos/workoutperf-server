@@ -1,5 +1,6 @@
 package com.workoutperf.entity
 
+import com.workoutperf.model.WorkoutType
 import javax.persistence.*
 
 @Entity
@@ -9,6 +10,7 @@ data class Workout(
         val name: String = "",
         val description: String = "",
         val period: Period = Period(),
+        val type: String = "TIME_ASC_SCORE_ASC",
         @ManyToOne
         @JoinColumn(name = "contest_id")
         var contest: Contest? = null,
@@ -21,6 +23,7 @@ data class Workout(
                     name = workout.name,
                     description = workout.description,
                     period = Period(workout.period.begin, workout.period.end),
+                    type = workout.type.name,
                     acl = Acl(workout.acl)
             )
 
@@ -30,6 +33,7 @@ data class Workout(
                     name = this.name,
                     description = this.description,
                     period = com.workoutperf.model.Period(this.period.begin, this.period.end),
+                    type = WorkoutType.valueOf(this.type),
                     acl = this.acl.toModel()
             )
 }

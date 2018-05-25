@@ -6,12 +6,14 @@ import javax.persistence.*
 data class WorkoutLeaderboard(
         @Id
         val id: String? = null,
-        @OneToOne
+        @ManyToOne
+        @JoinColumn(name = "division_id")
         val division: Group = Group(),
         @OneToMany(mappedBy = "workout")
-        val positions: MutableSet<WorkoutPosition>,
+        val positions: MutableSet<WorkoutPosition> = mutableSetOf(),
         val period: Period = Period(),
-        @OneToOne
+        @ManyToOne
+        @JoinColumn(name = "workout_id")
         val workout: Workout = Workout(),
         @OneToOne(cascade = [CascadeType.ALL])
         val acl: Acl = Acl()

@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.util.*
 
 
 @RestController
@@ -144,8 +143,8 @@ class ContestEndpoint(val contestService: ContestService) {
     data class AddContestDivisionBody(
             val name: String
     ) {
-        fun toModel() = Group(
-                id = UUID.randomUUID().toString(),
+        fun toModel(contestId: String) = Group(
+                id = "${contestId}_${this.name}",
                 name = this.name,
                 members = mutableSetOf(),
                 acl = Acl()
@@ -157,7 +156,7 @@ class ContestEndpoint(val contestService: ContestService) {
             @PathVariable("contestId") contestId: String,
             @RequestBody addContestDivisionBody: AddContestDivisionBody
     ): ResponseEntity<Any> {
-        val division = contestService.addDivision(contestId, addContestDivisionBody.toModel())
+        val division = contestService.addDivision(contestId, addContestDivisionBody.toModel(contestId))
         return if (division.isPresent) {
             val location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{divisionId}")

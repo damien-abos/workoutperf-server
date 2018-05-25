@@ -1,6 +1,6 @@
 package com.workoutperf.endpoint
 
-import com.workoutperf.service.WorkoutLeaderboardService
+import com.workoutperf.service.LeaderboardService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -10,27 +10,26 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(path = ["/contests/{contestId}/workouts/{workoutId}/leaderboard"], produces = [(MediaType.APPLICATION_JSON_VALUE)])
-class WorkoutLeaderboardEndpoint(
-        val workoutLeaderboardService: WorkoutLeaderboardService
+@RequestMapping(path = ["/contests/{contestId}/leaderboards"], produces = [(MediaType.APPLICATION_JSON_VALUE)])
+class LeaderboardEndpoint(
+        val leaderboardService: LeaderboardService
 ) {
 
     //
     //
-    // POST /contest/{contestId}/workouts/{workoutId}/leaderboard
+    // POST /contest/{contestId}/leaderboards
 
     @RequestMapping(method = [RequestMethod.POST])
     fun computeWorkoutLeaderboard(
-            @PathVariable("contestId") contestId: String,
-            @PathVariable("workoutId") workoutId: String
+            @PathVariable("contestId") contestId: String
     ): ResponseEntity<Any> {
-        workoutLeaderboardService.computeWorkoutLeaderboard(contestId, workoutId)
+        leaderboardService.computeContestLeaderboards(contestId)
         return ResponseEntity.ok().build()
     }
 
     //
     //
-    // GET /contest/{contestId}/workouts/{workoutId}/leaderboard
+    // GET /contest/{contestId}/leaderboards
 
     @RequestMapping(method = [RequestMethod.GET])
     fun getAllWorkoutLeaderboards(
