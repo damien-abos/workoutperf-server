@@ -23,24 +23,33 @@ data class ContestLeaderboard(
                     id = contestLeaderboard.id,
                     division = Group(contestLeaderboard.division),
                     positions = contestLeaderboard.positions
-                            .map { contestPosition -> ContestPosition(contestPosition) }
+                            .map { contestPosition -> ContestPosition(contestPosition, contestLeaderboard = null) }
                             .toCollection(LinkedHashSet(contestLeaderboard.positions.size)),
                     period = Period(contestLeaderboard.period),
-                    contest = Contest(contestLeaderboard.contest),
+                    contest = null,
                     acl = Acl(contestLeaderboard.acl)
-            ) {
-        this.positions.map { position -> position.leaderboard = this }
-    }
+            )
 
     fun toModel() =
             com.workoutperf.model.ContestLeaderboard(
                     id = this.id,
                     division = this.division!!.toModel(),
                     positions = this.positions
-                            .map { contestPosition -> contestPosition.toModel() }
+                            .map { contestPosition -> contestPosition.toModel(contestLeaderboard = null) }
                             .toCollection(LinkedHashSet(this.positions.size)),
                     period = this.period.toModel(),
                     contest = this.contest!!.toModel(),
                     acl = this.acl.toModel()
             )
+
+    override fun hashCode(): Int {
+        return if (this.id != null) this.id.hashCode() else 0
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val that = other as ContestLeaderboard?
+        return id == that!!.id
+    }
 }

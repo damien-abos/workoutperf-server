@@ -159,4 +159,9 @@ class LeaderboardService(
         }
     }
 
+    fun getAllContestLeaderboards(contestId: String): List<com.workoutperf.model.ContestLeaderboard> {
+        return contestLeaderboardRepository.findAllByContestId(contestId)
+                .map { contestLeaderboard -> contestLeaderboard.toModel() }
+    }
+
 }

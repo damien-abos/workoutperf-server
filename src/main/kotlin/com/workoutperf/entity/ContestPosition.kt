@@ -48,4 +48,15 @@ data class ContestPosition(
                     athlete = this.athlete?.toModel(),
                     acl = this.acl.toModel()
             )
+
+        override fun hashCode(): Int {
+                return if (this.id != null) this.id.hashCode() else 0
+        }
+
+        override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other == null || javaClass != other.javaClass) return false
+                val that = other as ContestPosition?
+                return id == that!!.id
+        }
 }
