@@ -5,6 +5,7 @@ data class Workout(
         val name: String,
         val description: String,
         val period: Period,
+        val weight: Double,
         val type: WorkoutType,
         override val acl: Acl
 ) : AclObject

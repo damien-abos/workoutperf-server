@@ -7,7 +7,7 @@ data class ContestPosition(
         @Id
         val id: String? = null,
         var rank: Int = 0,
-        val points: Int = 0,
+        val points: Double = 0.0,
         @ManyToOne
         @JoinColumn(name = "athlete_id")
         val athlete: Person? = null,

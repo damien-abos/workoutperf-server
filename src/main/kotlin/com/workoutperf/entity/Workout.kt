@@ -10,6 +10,7 @@ data class Workout(
         val name: String = "",
         val description: String = "",
         val period: Period = Period(),
+        val weight: Double = 1.0,
         val type: String = "TIME_ASC_SCORE_ASC",
         @ManyToOne
         @JoinColumn(name = "contest_id")
@@ -23,6 +24,7 @@ data class Workout(
                     name = workout.name,
                     description = workout.description,
                     period = Period(workout.period.begin, workout.period.end),
+                    weight = workout.weight,
                     type = workout.type.name,
                     acl = Acl(workout.acl)
             )
@@ -33,6 +35,7 @@ data class Workout(
                     name = this.name,
                     description = this.description,
                     period = com.workoutperf.model.Period(this.period.begin, this.period.end),
+                    weight = this.weight,
                     type = WorkoutType.valueOf(this.type),
                     acl = this.acl.toModel()
             )

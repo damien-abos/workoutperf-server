@@ -26,6 +26,7 @@ class WorkoutEndpoint(
             val name: String,
             val description: String = "",
             val period: Period = Period(),
+            val weight: Double = 1.0,
             val type: WorkoutType = WorkoutType.SCORE_ASC_TIME_ASC
     ) {
         fun toModel() = Workout(
@@ -33,6 +34,7 @@ class WorkoutEndpoint(
                 name = this.name,
                 description = this.description,
                 period = this.period,
+                weight = this.weight,
                 type = this.type,
                 acl = Acl()
         )

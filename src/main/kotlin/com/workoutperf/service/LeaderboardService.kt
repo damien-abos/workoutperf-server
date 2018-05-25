@@ -42,10 +42,10 @@ class LeaderboardService(
                             }
                         })
                 // build a workout leaderboard per division
-                val workoutLeaderboards = contest.get().divisions.map { group ->
+                val workoutLeaderboards = contest.get().divisions.map { division ->
                     WorkoutLeaderboard(
-                            id = "${contestId}_${workoutId}_${group.name}",
-                            division = group,
+                            id = "${contestId}_${workoutId}_${division.name}",
+                            division = division,
                             workout = workout.get()
                     )
                 }
@@ -75,7 +75,7 @@ class LeaderboardService(
                         workoutPosition = WorkoutPosition(
                                 id = "${leaderboard.id}_${performance.athlete!!.id}",
                                 rank = rank,
-                                points = rank,
+                                points = rank.toDouble(),
                                 leaderboard = leaderboardEntity,
                                 performance = performance,
                                 athlete = performance.athlete,
@@ -92,7 +92,7 @@ class LeaderboardService(
                         val workoutPosition = WorkoutPosition(
                                 id = "${leaderboard.id}_${person.id}",
                                 rank = index,
-                                points = index,
+                                points = index.toDouble(),
                                 leaderboard = leaderboardEntity,
                                 performance = null,
                                 athlete = person,
@@ -121,7 +121,7 @@ class LeaderboardService(
             }
             contest.get().divisions.map { division ->
                 val leaderboard = ContestLeaderboard(
-                        id = "${contestId}_${division.id!!}",
+                        id = "${contestId}_${division.name}",
                         division = division,
                         contest = contest.get()
                 )
@@ -133,9 +133,9 @@ class LeaderboardService(
                 // create leaderboard positions sorted by score
                 val contestPositions = division.members.map { athlete ->
                     val athletePositions = positionsByMember[athlete.id]!!
-                    val points = athletePositions.sumBy { position -> position.points }
+                    val points = athletePositions.sumByDouble { position -> position.points * position.workout!!.weight }
                     ContestPosition(
-                            id = "${contestId}_${athlete.id!!}",
+                            id = "${leaderboard.id}_${athlete.id!!}",
                             points = points,
                             athlete = athlete,
                             workoutPositions = athletePositions.toCollection(LinkedHashSet(athletePositions.size)),

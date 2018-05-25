@@ -7,7 +7,7 @@ data class WorkoutPosition(
         @Id
         val id: String? = null,
         val rank: Int = 0,
-        val points: Int = 0
+        val points: Double = 0.0
 
 ) {
     @OneToOne
@@ -28,7 +28,7 @@ data class WorkoutPosition(
     constructor(
             id: String? = null,
             rank: Int = 0,
-            points: Int = 0,
+            points: Double = 0.0,
             leaderboard: WorkoutLeaderboard? = null,
             performance: Performance? = null,
             athlete: Person? = null,
