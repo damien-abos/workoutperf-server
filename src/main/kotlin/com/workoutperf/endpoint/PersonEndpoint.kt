@@ -23,8 +23,8 @@ class PersonEndpoint(val personService: PersonService) {
     data class AddPersonBody(
             val id: String,
             val name: String,
-            val birthday: LocalDate,
-            val gender: Gender
+            val birthday: LocalDate = LocalDate.now(),
+            val gender: Gender = Gender.MALE
     ) {
         fun toModel() = Person(
                 id = this.id,

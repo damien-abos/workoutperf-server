@@ -28,7 +28,7 @@ class LeaderboardService(
                 // sort all performances for the workout
                 val positions = performances
                         .sortedWith(kotlin.Comparator { o1, o2 ->
-                            val deltaDuration = o1.duration.minus(o2.duration).nano
+                            val deltaDuration = o1.duration.minus(o2.duration).seconds.toInt()
                             val deltaScore = o1.score - o2.score
                             when (WorkoutType.valueOf(workout.get().type)) {
                                 WorkoutType.TIME_ASC_SCORE_ASC -> if (deltaDuration == 0) deltaScore else deltaDuration
