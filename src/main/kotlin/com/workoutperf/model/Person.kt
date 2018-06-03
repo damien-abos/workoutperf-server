@@ -7,5 +7,5 @@ data class Person(
         val name: String,
         val birthday: LocalDate,
         val gender: Gender,
-        override val acl: Acl
+        override val acl: Acl?
 ) : AclObject

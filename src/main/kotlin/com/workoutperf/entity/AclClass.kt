@@ -8,19 +8,22 @@ import javax.persistence.OneToOne
 @Entity
 data class AclClass(
         @Id
-        val collection: String,
+        val collection: String? = null,
         @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl
+        val acl: Acl? = null
 ) {
+
     constructor(aclClass: com.workoutperf.model.AclClass) :
             this(
                     collection = aclClass.collection,
-                    acl = Acl(aclClass.acl)
+                    acl = if (aclClass.acl != null) Acl(aclClass.acl) else null
             )
+
+
 
     fun toModel() =
             com.workoutperf.model.AclClass(
                     collection = this.collection,
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 }

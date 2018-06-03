@@ -20,7 +20,7 @@ data class ContestPosition(
                 inverseJoinColumns = [JoinColumn(name = "contestposition_id", referencedColumnName = "id")])
         val workoutPositions: MutableSet<WorkoutPosition> = mutableSetOf(),
         @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl = Acl()
+        val acl: Acl? = null
 ) {
     constructor(contestPosition: com.workoutperf.model.ContestPosition, contestLeaderboard: ContestLeaderboard? = null) :
             this(
@@ -31,7 +31,7 @@ data class ContestPosition(
                     workoutPositions = contestPosition.workoutPositions
                             .map { workoutPositionEntry -> WorkoutPosition(workoutPositionEntry.value) }
                             .toCollection(LinkedHashSet(contestPosition.workoutPositions.size)),
-                    acl = Acl(contestPosition.acl)
+                    acl = if (contestPosition.acl != null) Acl(contestPosition.acl) else null
             )
 
     fun toModel(contestLeaderboard: com.workoutperf.model.ContestLeaderboard? = null) =
@@ -46,7 +46,7 @@ data class ContestPosition(
                                     { workoutPosition: com.workoutperf.model.WorkoutPosition -> workoutPosition.workout!! }),
                     contest = null,
                     athlete = this.athlete?.toModel(),
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 
         override fun hashCode(): Int {

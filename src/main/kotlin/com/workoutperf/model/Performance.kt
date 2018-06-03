@@ -13,5 +13,5 @@ data class Performance(
         val athlete: Person,
         val judge: Person?,
         val workout: Workout? = null,
-        override val acl: Acl
+        override val acl: Acl?
 ) : AclObject

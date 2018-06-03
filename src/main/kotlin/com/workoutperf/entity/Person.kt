@@ -14,7 +14,7 @@ data class Person(
         val birthday: LocalDate = LocalDate.now(),
         val gender: String = "MALE",
         @OneToOne(cascade = [CascadeType.ALL])
-        var acl: Acl = Acl()
+        var acl: Acl? =null
 ) {
 
     constructor(person: com.workoutperf.model.Person) :
@@ -23,7 +23,7 @@ data class Person(
                     name = person.name,
                     birthday = person.birthday,
                     gender = person.gender.name,
-                    acl = Acl(person.acl)
+                    acl = if (person.acl != null) Acl(person.acl) else null
             )
 
     fun toModel(): com.workoutperf.model.Person =
@@ -32,7 +32,7 @@ data class Person(
                     name = this.name,
                     birthday = this.birthday,
                     gender = com.workoutperf.model.Gender.valueOf(this.gender),
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 
     override fun hashCode(): Int {

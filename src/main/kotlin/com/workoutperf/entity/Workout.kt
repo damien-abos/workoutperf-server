@@ -16,7 +16,7 @@ data class Workout(
         @JoinColumn(name = "contest_id")
         var contest: Contest? = null,
         @OneToOne(cascade = [CascadeType.ALL])
-        var acl: Acl = Acl()
+        var acl: Acl? = null
 ) {
     constructor(workout: com.workoutperf.model.Workout) :
             this(
@@ -26,7 +26,7 @@ data class Workout(
                     period = Period(workout.period.begin, workout.period.end),
                     weight = workout.weight,
                     type = workout.type.name,
-                    acl = Acl(workout.acl)
+                    acl = if (workout.acl != null) Acl(workout.acl) else null
             )
 
     fun toModel(): com.workoutperf.model.Workout =
@@ -37,6 +37,6 @@ data class Workout(
                     period = com.workoutperf.model.Period(this.period.begin, this.period.end),
                     weight = this.weight,
                     type = WorkoutType.valueOf(this.type),
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 }

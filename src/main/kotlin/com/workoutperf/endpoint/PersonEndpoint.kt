@@ -31,7 +31,7 @@ class PersonEndpoint(val personService: PersonService) {
                 name = this.name,
                 birthday = this.birthday,
                 gender = this.gender,
-                acl = Acl()
+                acl = Acl("Person_${this.id}")
         )
     }
 

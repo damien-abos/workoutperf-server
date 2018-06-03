@@ -10,5 +10,5 @@ data class Contest(
         val judges: MutableSet<Person> = mutableSetOf(),
         val members: MutableSet<Person> = mutableSetOf(),
         val divisions: MutableSet<Group> = mutableSetOf(),
-        override val acl: Acl
+        override val acl: Acl? = null
 ) : AclObject

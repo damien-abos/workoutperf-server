@@ -1,11 +1,15 @@
 package com.workoutperf.service
 
+import com.workoutperf.model.AclPermission
 import com.workoutperf.model.Contest
 import com.workoutperf.model.Group
+import com.workoutperf.model.Sid
 import com.workoutperf.repository.ContestRepository
 import com.workoutperf.repository.GroupRepository
 import com.workoutperf.repository.PersonRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -15,6 +19,7 @@ class ContestService(
         val groupRepository: GroupRepository
 ) {
 
+    @Transactional
     fun addContest(contest: Contest): Optional<Contest> =
             if (!contestRepository.existsById(contest.id!!)) {
                 val contestEntity = com.workoutperf.entity.Contest(contest)
@@ -23,12 +28,19 @@ class ContestService(
                 Optional.empty()
             }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    fun updateContest(contest: Contest): Optional<Contest> =
+            Optional.of(contestRepository.save(com.workoutperf.entity.Contest(contest)).toModel())
+
+    @Transactional(readOnly = true)
     fun getContest(id: String): Optional<Contest> =
             contestRepository.findById(id).map { it.toModel() }
 
+    @Transactional(readOnly = true)
     fun getAllContests(): List<Contest> =
-            contestRepository.findAll().map { it.toModel() }
+            contestRepository.findAll().map { it.toModel() }.filter { it.checkAcl(Sid.current.get(), AclPermission.LIST) }
 
+    @Transactional
     fun addMember(contestId: String, personId: String): Optional<Contest> {
         val contest = contestRepository.findById(contestId)
         return if (contest.isPresent && contest.get().members.none { it.id == personId }) {
@@ -46,6 +58,7 @@ class ContestService(
         }
     }
 
+    @Transactional
     fun addDivision(contestId: String, division: Group): Optional<Group> {
         val contest = contestRepository.findById(contestId)
         return if (contest.isPresent && contest.get().divisions.none { it.name == division.name }) {
@@ -63,6 +76,7 @@ class ContestService(
         }
     }
 
+    @Transactional
     fun addDivisionMember(contestId: String, divisionId: String, personId: String): Optional<Group> {
         val contest = contestRepository.findById(contestId)
         return if (contest.isPresent
@@ -81,5 +95,14 @@ class ContestService(
         } else {
             Optional.empty()
         }
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    fun removeContest(contestId: String): Boolean {
+        val exists = contestRepository.existsById(contestId)
+        if (exists) {
+            contestRepository.deleteById(contestId)
+        }
+        return exists
     }
 }

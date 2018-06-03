@@ -8,7 +8,6 @@ data class WorkoutPosition(
         val id: String? = null,
         val rank: Int = 0,
         val points: Double = 0.0
-
 ) {
     @OneToOne
     var leaderboard: WorkoutLeaderboard? = null

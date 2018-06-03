@@ -1,9 +1,6 @@
 package com.workoutperf.endpoint
 
-import com.workoutperf.model.Acl
-import com.workoutperf.model.Contest
-import com.workoutperf.model.Group
-import com.workoutperf.model.Period
+import com.workoutperf.model.*
 import com.workoutperf.service.ContestService
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
@@ -38,7 +35,7 @@ class ContestEndpoint(val contestService: ContestService) {
                 judges = mutableSetOf(),
                 members = mutableSetOf(),
                 divisions = mutableSetOf(),
-                acl = Acl()
+                acl = Acl("Contest_${this.id}")
         )
     }
 
@@ -86,13 +83,37 @@ class ContestEndpoint(val contestService: ContestService) {
     //
     // GET /contests/{contestId}
 
+    data class GetContest(
+            val id: String?,
+            val name: String,
+            val description: String,
+            val workouts: List<String>,
+            val divisions: List<String>,
+            val period: Period,
+            val organizers: List<String>,
+            val judges: List<String>,
+            val members: List<String>
+            ) {
+        constructor(contest: Contest) : this(
+                id = contest.id,
+                name = contest.name,
+                description = contest.description,
+                workouts = contest.workouts.map { it.id!! },
+                divisions = contest.divisions.map { it.id!! },
+                period = contest.period,
+                organizers = contest.organizers.map { it.id },
+                judges = contest.judges.map { it.id },
+                members = contest.members.map { it.id }
+        )
+    }
+
     @RequestMapping(path = ["/{contestId}"], method = [RequestMethod.GET])
     fun getContest(
             @PathVariable("contestId") contestId: String
     ): ResponseEntity<Any> {
         val contest = contestService.getContest(contestId)
         return if (contest.isPresent) {
-            ok(contest)
+            ok(GetContest(contest.get()))
         } else {
             notFound().build()
         }
@@ -100,7 +121,54 @@ class ContestEndpoint(val contestService: ContestService) {
 
     //
     //
-    // TODO('PUT /contests/{contestId}')
+    // PUT /contests/{contestId}
+
+    data class UpdateContestBody(
+            val name: String? = null,
+            val description: String? = null,
+            val period: Period? = null
+    ) {
+
+        fun merge(contest: Contest) = Contest(
+                id = contest.id,
+                name = if (this.name != null) this.name else contest.name,
+                description = if (this.description != null) this.description else contest.description,
+                period = if (this.period != null) this.period else contest.period,
+                workouts = contest.workouts,
+                organizers = contest.organizers,
+                judges = contest.judges,
+                members = contest.members,
+                divisions = contest.divisions,
+                acl = contest.acl
+        )
+    }
+
+    @RequestMapping(path = ["/{contestId}"], method = [RequestMethod.PUT])
+    fun updateContest(
+            @PathVariable("contestId") contestId: String,
+            @RequestBody updateContestBody: UpdateContestBody
+    ): ResponseEntity<Any> {
+        val contest = contestService.getContest(contestId)
+        return if (contest.isPresent) {
+            val updatedContest = contestService.updateContest(updateContestBody.merge(contest.get()))
+            ok(GetContest(updatedContest.get()))
+        } else {
+            notFound().build()
+        }
+    }
+
+    //
+    //
+    // DELETE /contests/{contestId}
+
+    @RequestMapping(path = ["/{contestId}"], method = [RequestMethod.DELETE])
+    fun removeContest(@PathVariable("contestId") contestId: String): ResponseEntity<Any> {
+        return if (contestService.removeContest(contestId)) {
+            noContent().build()
+        } else {
+            notFound().build()
+        }
+    }
 
     //
     //
@@ -147,7 +215,7 @@ class ContestEndpoint(val contestService: ContestService) {
                 id = "${contestId}_${this.name}",
                 name = this.name,
                 members = mutableSetOf(),
-                acl = Acl()
+                acl = Acl("ContestDivision_${contestId}_${this.name}")
         )
     }
 

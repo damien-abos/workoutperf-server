@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018, "Damien Abos" <damien.abos@gmail.com>. All rights reserved.
+ * PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
 package com.workoutperf.entity
 
 import javax.persistence.*
@@ -16,7 +20,7 @@ data class ContestLeaderboard(
         @JoinColumn(name = "contest_id")
         var contest: Contest? = null,
         @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl = Acl()
+        val acl: Acl? = null
 ) {
     constructor(contestLeaderboard: com.workoutperf.model.ContestLeaderboard) :
             this(
@@ -27,7 +31,7 @@ data class ContestLeaderboard(
                             .toCollection(LinkedHashSet(contestLeaderboard.positions.size)),
                     period = Period(contestLeaderboard.period),
                     contest = null,
-                    acl = Acl(contestLeaderboard.acl)
+                    acl = if (contestLeaderboard.acl != null) Acl(contestLeaderboard.acl) else null
             )
 
     fun toModel() =
@@ -39,7 +43,7 @@ data class ContestLeaderboard(
                             .toCollection(LinkedHashSet(this.positions.size)),
                     period = this.period.toModel(),
                     contest = this.contest!!.toModel(),
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 
     override fun hashCode(): Int {

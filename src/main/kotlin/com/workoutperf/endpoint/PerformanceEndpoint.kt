@@ -44,7 +44,7 @@ class PerformanceEndpoint(
                 comment = this.comment,
                 athlete = athlete,
                 judge = judge,
-                acl = Acl()
+                acl = Acl("Performance_${id}")
         )
     }
 

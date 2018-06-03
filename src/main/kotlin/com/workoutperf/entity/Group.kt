@@ -8,7 +8,7 @@ data class Group(
         val id: String? = null,
         val name: String = "",
         @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl = Acl()
+        val acl: Acl? = null
 ) {
     @ManyToMany
     @JoinTable(name = "group_members",
@@ -20,7 +20,7 @@ data class Group(
             this(
                     id = group.id,
                     name = group.name,
-                    acl = Acl(group.acl)
+                    acl = if (group.acl != null) Acl(group.acl) else null
             ) {
         this.members = group.members
                 .map { person -> Person(person) }
@@ -34,6 +34,6 @@ data class Group(
                     members = this.members
                             .map { person -> person.toModel() }
                             .toCollection(LinkedHashSet(this.members.size)),
-                    acl = this.acl.toModel()
+                    acl = this.acl?.toModel()
             )
 }

@@ -6,7 +6,7 @@ data class ContestLeaderboard(
         override val positions: MutableSet<ContestPosition>,
         override val period: Period,
         val contest: Contest,
-        override val acl: Acl
+        override val acl: Acl?
 ) : AclObject, Leaderboard<ContestPosition> {
     init {
         this.positions.map { position ->
