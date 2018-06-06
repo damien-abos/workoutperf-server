@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 @RequestMapping(path = ["/contests"], produces = [APPLICATION_JSON_VALUE])
 class ContestEndpoint(val contestService: ContestService) {
 
-
     //
     //
     // POST /contest
@@ -234,6 +233,10 @@ class ContestEndpoint(val contestService: ContestService) {
             badRequest().build()
         }
     }
+
+    //
+    //
+    //
 
     //
     //

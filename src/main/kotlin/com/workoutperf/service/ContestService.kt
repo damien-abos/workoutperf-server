@@ -16,12 +16,14 @@ import java.util.*
 class ContestService(
         val contestRepository: ContestRepository,
         val personRepository: PersonRepository,
-        val groupRepository: GroupRepository
+        val groupRepository: GroupRepository,
+        val aclClassService: AclClassService
 ) {
 
     @Transactional
     fun addContest(contest: Contest): Optional<Contest> =
             if (!contestRepository.existsById(contest.id!!)) {
+                aclClassService.getAclClass("Contest").apply(contest)
                 val contestEntity = com.workoutperf.entity.Contest(contest)
                 Optional.of(contestRepository.save(contestEntity).toModel())
             } else {

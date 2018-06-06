@@ -6,15 +6,16 @@ import javax.persistence.*
 data class Acl(
         @Id
         val id: String? = null,
-        @OneToMany(mappedBy = "acl")
+        @OneToMany(mappedBy = "acl", cascade = [CascadeType.ALL])
         val aclEntries: MutableSet<AclEntry> = mutableSetOf()
 ) {
     constructor(acl: com.workoutperf.model.Acl) : this(
-            id = acl.id,
-            aclEntries = acl.aclEntries
-                    .map { aclEntry -> AclEntry(aclEntry, acl) }
-                    .toCollection(LinkedHashSet(acl.aclEntries.size))
-    )
+            id = acl.id
+    ) {
+        acl.aclEntries
+                .map { aclEntry -> AclEntry(aclEntry, this) }
+                .forEach { aclEntries.add(it) }
+    }
 
     fun toModel() =
             com.workoutperf.model.Acl(
@@ -35,4 +36,5 @@ data class Acl(
         return id == that.id
     }
 
+    override fun toString() = "Acl(id=${id})"
 }

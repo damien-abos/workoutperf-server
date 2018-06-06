@@ -15,10 +15,11 @@ data class AclEntry(
         @JoinColumn(name = "acl_id")
         val acl: Acl? = null
 ) {
-    constructor(aclEntry: com.workoutperf.model.AclEntry, acl: com.workoutperf.model.Acl) : this(
+    constructor(aclEntry: com.workoutperf.model.AclEntry, acl: Acl) : this(
             id = "${acl.id}_${aclEntry.sid}",
             sid = aclEntry.sid,
-            permission = aclEntry.permission
+            permission = aclEntry.permission,
+            acl = acl
     )
 
     fun toModel() =
@@ -37,5 +38,7 @@ data class AclEntry(
         val that = other as Acl
         return id == that.id
     }
+
+    override fun toString() = "AclEntry(sid=${sid},permission=${permission})"
 
 }

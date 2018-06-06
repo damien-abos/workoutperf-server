@@ -1,0 +1,12 @@
+@startuml
+
+class SID {
+}
+
+class SGroup {
+}
+
+SID <|-- SGroup
+SGroup "0..*" o-- "1..*" SID
+
+@enduml
