@@ -1,6 +1,5 @@
 package com.workoutperf.endpoint
 
-import com.workoutperf.model.Acl
 import com.workoutperf.model.Period
 import com.workoutperf.model.Workout
 import com.workoutperf.model.WorkoutType

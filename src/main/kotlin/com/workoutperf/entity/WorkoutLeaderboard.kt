@@ -7,10 +7,7 @@ data class WorkoutLeaderboard(
         @Id
         val id: String? = null,
 
-        val period: Period = Period(),
-
-        @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl? = null
+        val period: Period = Period()
 ) {
     @ManyToOne
     @JoinColumn(name = "division_id")
@@ -28,12 +25,10 @@ data class WorkoutLeaderboard(
             period: Period = Period(),
             division: Group = Group(),
             positions: MutableSet<WorkoutPosition> = mutableSetOf(),
-            workout: Workout = Workout(),
-            acl: Acl? = null
+            workout: Workout = Workout()
     ) : this(
             id = id,
-            period = period,
-            acl = acl
+            period = period
     ) {
         this.division = division
         this.positions = positions
@@ -44,8 +39,7 @@ data class WorkoutLeaderboard(
     constructor(workoutLeaderboard: com.workoutperf.model.WorkoutLeaderboard) :
             this(
                     id = workoutLeaderboard.id,
-                    period = Period(workoutLeaderboard.period),
-                    acl = if (workoutLeaderboard.acl != null) Acl(workoutLeaderboard.acl) else null
+                    period = Period(workoutLeaderboard.period)
             ) {
         this.division = Group(workoutLeaderboard.division)
         this.positions = workoutLeaderboard.positions
@@ -64,8 +58,7 @@ data class WorkoutLeaderboard(
                             .map { position -> position.toModel() }
                             .toCollection(LinkedHashSet(this.positions.size)),
                     period = this.period.toModel(),
-                    workout = this.workout.toModel(),
-                    acl = this.acl?.toModel()
+                    workout = this.workout.toModel()
             )
 
     override fun hashCode(): Int {

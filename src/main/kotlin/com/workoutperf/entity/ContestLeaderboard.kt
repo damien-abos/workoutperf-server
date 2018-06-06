@@ -18,9 +18,7 @@ data class ContestLeaderboard(
         val period: Period = Period(),
         @ManyToOne
         @JoinColumn(name = "contest_id")
-        var contest: Contest? = null,
-        @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl? = null
+        var contest: Contest? = null
 ) {
     constructor(contestLeaderboard: com.workoutperf.model.ContestLeaderboard) :
             this(
@@ -30,8 +28,7 @@ data class ContestLeaderboard(
                             .map { contestPosition -> ContestPosition(contestPosition, contestLeaderboard = null) }
                             .toCollection(LinkedHashSet(contestLeaderboard.positions.size)),
                     period = Period(contestLeaderboard.period),
-                    contest = null,
-                    acl = if (contestLeaderboard.acl != null) Acl(contestLeaderboard.acl) else null
+                    contest = null
             )
 
     fun toModel() =
@@ -42,8 +39,7 @@ data class ContestLeaderboard(
                             .map { contestPosition -> contestPosition.toModel(contestLeaderboard = null) }
                             .toCollection(LinkedHashSet(this.positions.size)),
                     period = this.period.toModel(),
-                    contest = this.contest!!.toModel(),
-                    acl = this.acl?.toModel()
+                    contest = this.contest!!.toModel()
             )
 
     override fun hashCode(): Int {

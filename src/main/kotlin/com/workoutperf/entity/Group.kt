@@ -6,9 +6,7 @@ import javax.persistence.*
 data class Group(
         @Id
         val id: String? = null,
-        val name: String = "",
-        @OneToOne(cascade = [CascadeType.ALL])
-        val acl: Acl? = null
+        val name: String = ""
 ) {
     @ManyToMany
     @JoinTable(name = "group_members",
@@ -19,8 +17,7 @@ data class Group(
     constructor(group: com.workoutperf.model.Group) :
             this(
                     id = group.id,
-                    name = group.name,
-                    acl = if (group.acl != null) Acl(group.acl) else null
+                    name = group.name
             ) {
         this.members = group.members
                 .map { person -> Person(person) }
@@ -33,7 +30,6 @@ data class Group(
                     name = this.name,
                     members = this.members
                             .map { person -> person.toModel() }
-                            .toCollection(LinkedHashSet(this.members.size)),
-                    acl = this.acl?.toModel()
+                            .toCollection(LinkedHashSet(this.members.size))
             )
 }

@@ -33,8 +33,7 @@ class ContestEndpoint(val contestService: ContestService) {
                 organizers = mutableSetOf(),
                 judges = mutableSetOf(),
                 members = mutableSetOf(),
-                divisions = mutableSetOf(),
-                acl = Acl("Contest_${this.id}")
+                divisions = mutableSetOf()
         )
     }
 
@@ -137,8 +136,7 @@ class ContestEndpoint(val contestService: ContestService) {
                 organizers = contest.organizers,
                 judges = contest.judges,
                 members = contest.members,
-                divisions = contest.divisions,
-                acl = contest.acl
+                divisions = contest.divisions
         )
     }
 
@@ -213,8 +211,7 @@ class ContestEndpoint(val contestService: ContestService) {
         fun toModel(contestId: String) = Group(
                 id = "${contestId}_${this.name}",
                 name = this.name,
-                members = mutableSetOf(),
-                acl = Acl("ContestDivision_${contestId}_${this.name}")
+                members = mutableSetOf()
         )
     }
 

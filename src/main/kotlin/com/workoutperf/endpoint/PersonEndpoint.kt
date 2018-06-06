@@ -1,6 +1,5 @@
 package com.workoutperf.endpoint
 
-import com.workoutperf.model.Acl
 import com.workoutperf.model.Gender
 import com.workoutperf.model.Person
 import com.workoutperf.service.PersonService

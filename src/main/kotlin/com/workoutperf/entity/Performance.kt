@@ -22,9 +22,7 @@ data class Performance(
         @OneToOne
         var judge: Person? = null,
         @OneToOne
-        var workout: Workout? = null,
-        @OneToOne(cascade = [CascadeType.ALL])
-        var acl: Acl? = null
+        var workout: Workout? = null
 ) {
     constructor(performance: com.workoutperf.model.Performance):
             this(
@@ -36,8 +34,7 @@ data class Performance(
                     comment = performance.comment,
                     athlete = Person(performance.athlete),
                     judge = if (performance.judge != null) Person(performance.judge) else null,
-                    workout = if (performance.workout != null) Workout(performance.workout) else null,
-                    acl = if (performance.acl != null) Acl(performance.acl) else null
+                    workout = if (performance.workout != null) Workout(performance.workout) else null
             )
 
     fun toModel()  =
@@ -50,7 +47,6 @@ data class Performance(
                     comment = this.comment,
                     athlete = this.athlete!!.toModel(),
                     judge = this.judge?.toModel(),
-                    workout = this.workout!!.toModel(),
-                    acl = this.acl?.toModel()
+                    workout = this.workout!!.toModel()
             )
 }

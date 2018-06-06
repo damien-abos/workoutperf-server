@@ -1,9 +1,7 @@
 package com.workoutperf.service
 
-import com.workoutperf.model.AclPermission
 import com.workoutperf.model.Contest
 import com.workoutperf.model.Group
-import com.workoutperf.model.Sid
 import com.workoutperf.repository.ContestRepository
 import com.workoutperf.repository.GroupRepository
 import com.workoutperf.repository.PersonRepository
@@ -16,14 +14,12 @@ import java.util.*
 class ContestService(
         val contestRepository: ContestRepository,
         val personRepository: PersonRepository,
-        val groupRepository: GroupRepository,
-        val aclClassService: AclClassService
+        val groupRepository: GroupRepository
 ) {
 
     @Transactional
     fun addContest(contest: Contest): Optional<Contest> =
             if (!contestRepository.existsById(contest.id!!)) {
-                aclClassService.getAclClass("Contest").apply(contest)
                 val contestEntity = com.workoutperf.entity.Contest(contest)
                 Optional.of(contestRepository.save(contestEntity).toModel())
             } else {
@@ -40,7 +36,7 @@ class ContestService(
 
     @Transactional(readOnly = true)
     fun getAllContests(): List<Contest> =
-            contestRepository.findAll().map { it.toModel() }.filter { it.checkAcl(Sid.current.get(), AclPermission.LIST) }
+            contestRepository.findAll().map { it.toModel() }
 
     @Transactional
     fun addMember(contestId: String, personId: String): Optional<Contest> {

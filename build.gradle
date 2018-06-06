@@ -48,6 +48,8 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.kafka:spring-kafka")
 
+	compile("org.springframework.security:spring-security-acl")
+
 	compile("com.fasterxml.jackson.module:jackson-module-kotlin")
 	compile("org.flywaydb:flyway-core")
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

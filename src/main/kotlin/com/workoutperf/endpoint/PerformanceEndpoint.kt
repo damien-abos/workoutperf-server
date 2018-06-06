@@ -1,11 +1,9 @@
 package com.workoutperf.endpoint
 
-import com.workoutperf.model.Acl
 import com.workoutperf.model.Performance
 import com.workoutperf.model.Person
 import com.workoutperf.service.PerformanceService
 import com.workoutperf.service.PersonService
-import org.apache.tomcat.jni.Local
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.*
 
 @RestController
 @RequestMapping(path = ["/contests/{contestId}/workouts/{workoutId}/performances"], produces = [(MediaType.APPLICATION_JSON_VALUE)])

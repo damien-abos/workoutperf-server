@@ -8,9 +8,7 @@ data class Contest(
         val id: String? = null,
         val name: String = "",
         val description: String = "",
-        val period: Period = Period(),
-        @OneToOne(cascade = [CascadeType.ALL])
-        var acl: Acl? = null
+        val period: Period = Period()
 ) {
     @OneToMany(mappedBy = "contest")
     val workouts: MutableSet<Workout> = mutableSetOf()
@@ -46,8 +44,7 @@ data class Contest(
             period = com.workoutperf.entity.Period(
                     begin = contest.period.begin,
                     end = contest.period.end
-            ),
-            acl = if (contest.acl != null) com.workoutperf.entity.Acl(contest.acl) else null
+            )
     )
 
     fun toModel() =
@@ -60,7 +57,6 @@ data class Contest(
                     organizers = this.organizers.map { person -> person.toModel() }.toCollection(LinkedHashSet(this.organizers.size)),
                     judges = this.judges.map { person -> person.toModel() }.toCollection(LinkedHashSet(this.judges.size)),
                     members = this.members.map { person -> person.toModel() }.toCollection(LinkedHashSet(this.members.size)),
-                    divisions = this.divisions.map { division -> division.toModel() }.toCollection(LinkedHashSet(this.divisions.size)),
-                    acl = this.acl?.toModel()
+                    divisions = this.divisions.map { division -> division.toModel() }.toCollection(LinkedHashSet(this.divisions.size))
             )
 }

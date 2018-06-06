@@ -27,7 +27,6 @@ class PersonService(
         val personEntity = personRepository.findById(person.id)
         return if (personEntity.isPresent) {
             val updatedPersonEntity = com.workoutperf.entity.Person(person)
-            updatedPersonEntity.acl = personEntity.get().acl;
             Optional.of(personRepository.save(updatedPersonEntity).toModel())
         } else {
             Optional.empty()
