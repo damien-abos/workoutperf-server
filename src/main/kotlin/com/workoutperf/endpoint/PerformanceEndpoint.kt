@@ -40,8 +40,7 @@ class PerformanceEndpoint(
                 //location = this.location,
                 comment = this.comment,
                 athlete = athlete,
-                judge = judge,
-                acl = Acl("Performance_${id}")
+                judge = judge
         )
     }
 

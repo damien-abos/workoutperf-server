@@ -29,8 +29,7 @@ class PersonEndpoint(val personService: PersonService) {
                 id = this.id,
                 name = this.name,
                 birthday = this.birthday,
-                gender = this.gender,
-                acl = Acl("Person_${this.id}")
+                gender = this.gender
         )
     }
 
@@ -83,8 +82,7 @@ class PersonEndpoint(val personService: PersonService) {
                     id = person.id,
                     name = name,
                     birthday = birthday,
-                    gender = gender,
-                    acl = person.acl
+                    gender = gender
             )
         }
     }

@@ -4,9 +4,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class WorkoutperfServer {
+class WorkoutperfServer
 
-    fun main(args: Array<String>) {
-        runApplication<WorkoutperfServer>(*args)
-    }
+fun main(args: Array<String>) {
+    runApplication<WorkoutperfServer>(*args)
 }
+

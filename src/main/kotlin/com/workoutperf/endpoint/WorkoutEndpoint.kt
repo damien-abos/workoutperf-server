@@ -34,8 +34,7 @@ class WorkoutEndpoint(
                 description = this.description,
                 period = this.period,
                 weight = this.weight,
-                type = this.type,
-                acl = Acl("Workout_${this.id}")
+                type = this.type
         )
     }
 

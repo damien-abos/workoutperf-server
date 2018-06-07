@@ -10,7 +10,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
     # Because detection is disabled you have to set correct dialect by hand.
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     # allow lazy fetch without session
     open-in-view: true
 
