@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ContestLeaderboardRepository : JpaRepository<ContestLeaderboard, String> {
 
-    fun findAllByContestId(contestId: String): List<ContestLeaderboard>
+  fun findAllByContestId(contestId: String): List<ContestLeaderboard>
 }

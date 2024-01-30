@@ -15,89 +15,89 @@ import java.time.LocalDate
 @RequestMapping(path = ["/people"], produces = [(MediaType.APPLICATION_JSON_VALUE)])
 class PersonEndpoint(val personService: PersonService) {
 
-    //
-    //
-    // POST /people
+  //
+  //
+  // POST /people
 
-    data class AddPersonBody(
-            val id: String,
-            val name: String,
-            val birthday: LocalDate = LocalDate.now(),
-            val gender: Gender = Gender.MALE
-    ) {
-        fun toModel() = Person(
-                id = this.id,
-                name = this.name,
-                birthday = this.birthday,
-                gender = this.gender
-        )
+  data class AddPersonBody(
+    val id: String,
+    val name: String,
+    val birthday: LocalDate = LocalDate.now(),
+    val gender: Gender = Gender.MALE
+  ) {
+    fun toModel() = Person(
+      id = this.id,
+      name = this.name,
+      birthday = this.birthday,
+      gender = this.gender
+    )
+  }
+
+  @RequestMapping(method = [RequestMethod.POST])
+  fun addPerson(
+    @RequestBody addPersonBody: AddPersonBody
+  ): ResponseEntity<Any> {
+    val person = personService.addPerson(addPersonBody.toModel())
+    return if (person.isPresent) {
+      val location = ServletUriComponentsBuilder
+        .fromCurrentRequest().path("/{contestId}")
+        .buildAndExpand(person.get().id).toUri()
+      ResponseEntity.created(location).build()
+    } else {
+      ResponseEntity.badRequest().build()
     }
+  }
 
-    @RequestMapping(method = [RequestMethod.POST])
-    fun addPerson(
-            @RequestBody addPersonBody: AddPersonBody
-    ): ResponseEntity<Any> {
-        val person = personService.addPerson(addPersonBody.toModel())
-        return if (person.isPresent) {
-            val location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{contestId}")
-                    .buildAndExpand(person.get().id).toUri()
-            ResponseEntity.created(location).build()
-        } else {
-            ResponseEntity.badRequest().build()
-        }
+  //
+  //
+  // GET /people
+
+  @RequestMapping(method = [RequestMethod.GET])
+  fun getAllPeople() =
+    personService.getAllPeople()
+
+  //
+  //
+  // PATCH /people/{personId}
+
+  data class MergePersonBody(
+    val name: String? = null,
+    val birthday: LocalDate? = null,
+    val gender: Gender? = null
+  ) {
+    fun merge(person: Person): Person {
+      var name = person.name
+      if (this.name != null) {
+        name = this.name
+      }
+      var birthday = person.birthday
+      if (this.birthday != null) {
+        birthday = this.birthday
+      }
+      var gender = person.gender
+      if (this.gender != null) {
+        gender = this.gender
+      }
+      return Person(
+        id = person.id,
+        name = name,
+        birthday = birthday,
+        gender = gender
+      )
     }
+  }
 
-    //
-    //
-    // GET /people
-
-    @RequestMapping(method = [RequestMethod.GET])
-    fun getAllPeople() =
-            personService.getAllPeople()
-
-    //
-    //
-    // PATCH /people/{personId}
-
-    data class MergePersonBody(
-            val name: String? = null,
-            val birthday: LocalDate? = null,
-            val gender: Gender? = null
-    ) {
-        fun merge(person: Person): Person {
-            var name = person.name
-            if (this.name != null) {
-                name = this.name
-            }
-            var birthday = person.birthday
-            if (this.birthday != null) {
-                birthday = this.birthday
-            }
-            var gender = person.gender
-            if (this.gender != null) {
-                gender = this.gender
-            }
-            return Person(
-                    id = person.id,
-                    name = name,
-                    birthday = birthday,
-                    gender = gender
-            )
-        }
+  @RequestMapping(path = ["/{personId}"], method = [RequestMethod.PATCH])
+  fun mergePerson(
+    @PathVariable("personId") personId: String,
+    @RequestBody mergePersonBody: MergePersonBody
+  ): ResponseEntity<Any> {
+    val person = personService.getPerson(personId)
+    return if (person.isPresent) {
+      ok(personService.updatePerson(mergePersonBody.merge(person.get())))
+    } else {
+      notFound().build()
     }
-
-    @RequestMapping(path = ["/{personId}"], method = [RequestMethod.PATCH])
-    fun mergePerson(
-            @PathVariable("personId") personId: String,
-            @RequestBody mergePersonBody: MergePersonBody
-    ): ResponseEntity<Any> {
-        val person = personService.getPerson(personId)
-        return if (person.isPresent) {
-            ok(personService.updatePerson(mergePersonBody.merge(person.get())))
-        } else {
-            notFound().build()
-        }
-    }
+  }
 
 }

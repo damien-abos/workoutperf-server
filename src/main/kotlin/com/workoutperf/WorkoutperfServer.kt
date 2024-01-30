@@ -7,6 +7,6 @@ import org.springframework.boot.runApplication
 class WorkoutperfServer
 
 fun main(args: Array<String>) {
-    runApplication<WorkoutperfServer>(*args)
+  runApplication<WorkoutperfServer>(*args)
 }
 

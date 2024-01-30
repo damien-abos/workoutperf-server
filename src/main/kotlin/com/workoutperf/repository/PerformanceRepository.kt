@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PerformanceRepository : JpaRepository<Performance, String> {
 
-    fun findByWorkoutId(workoutId: String): List<Performance>
+  fun findByWorkoutId(workoutId: String): List<Performance>
 
 }

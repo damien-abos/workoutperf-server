@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface WorkoutLeaderboardRepository : JpaRepository<WorkoutLeaderboard, String> {
 
-    fun findByWorkoutId(workoutId: String): List<WorkoutLeaderboard>
+  fun findByWorkoutId(workoutId: String): List<WorkoutLeaderboard>
 }

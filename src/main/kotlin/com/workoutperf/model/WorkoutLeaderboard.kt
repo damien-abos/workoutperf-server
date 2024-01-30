@@ -1,15 +1,16 @@
 package com.workoutperf.model
 
 data class WorkoutLeaderboard(
-        override val id: String?,
-        override val division: Group,
-        override val positions: MutableSet<WorkoutPosition>,
-        override val period: Period,
-        val workout: Workout
+  override val id: String?,
+  override val division: Group,
+  override val positions: MutableSet<WorkoutPosition>,
+  override val period: Period,
+  val workout: Workout
 ) : Leaderboard<WorkoutPosition> {
-    init {
-        this.positions.map { position ->
-            position.workout = this.workout
-            position.leaderboard = this }
+  init {
+    this.positions.map { position ->
+      position.workout = this.workout
+      position.leaderboard = this
     }
+  }
 }
